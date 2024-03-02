@@ -1,7 +1,29 @@
 #![no_std]
 #![deny(missing_docs)]
 
-//! Emoji Clock
+//! # Examples
+//!
+//! ```
+//! #[cfg(feature = "time")]
+//! {
+//!		use emoji_clock_2::{Clock, TimeRounding};
+//!		use time::Time;
+//!		let clock = Clock::Dial(Time::MIDNIGHT, TimeRounding::Round);
+//!		assert_eq!("🕛", clock.to_string());
+//! }
+//! ```
+//!
+//! ```
+//! #[cfg(feature = "chrono")]
+//! {
+//! 	use emoji_clock_2::{Clock, TimeRounding};
+//! 	use chrono::NaiveTime;
+//! 	let am_clock = Clock::DialMeridiem(NaiveTime::from_hms_opt(9, 25, 00).unwrap(), TimeRounding::Round);
+//! 	assert_eq!("🕤🌞", am_clock.to_string());
+//! 	let pm_clock = Clock::DialMeridiem(NaiveTime::from_hms_opt(21, 25, 00).unwrap(), TimeRounding::Round);
+//! 	assert_eq!("🕤🌝", pm_clock.to_string());
+//! }
+//! ```
 
 /// The common set of methods for time
 pub trait TimeLike {
@@ -14,20 +36,43 @@ pub trait TimeLike {
 /// Strategies for rounding time to 30-minute precision
 pub enum TimeRounding {
 	/// Round to the nearest time
-	/// 01:45 - 02:14 : 02:00
-	/// 02:15 - 02:44 : 02:30
+	/// - 01:45 - 02:14 : 02:00
+	/// - 02:15 - 02:44 : 02:30
 	Round,
 	/// Round down to the nearest time
-	/// 02:00 - 02:29 : 02:00
-	/// 02:30 - 02:59 : 02:30
+	/// - 02:00 - 02:29 : 02:00
+	/// - 02:30 - 02:59 : 02:30
 	Floor,
 	/// Round up to the nearest time
-	/// 01:31 - 02:00 : 02:00
-	/// 02:01 - 02:30 : 02:30
+	/// - 01:31 - 02:00 : 02:00
+	/// - 02:01 - 02:30 : 02:30
 	Ceil,
 }
 
 /// Renders a clock in emoji
+/// # Examples
+///
+/// ```
+/// #[cfg(feature = "time")]
+/// {
+///		use emoji_clock_2::{Clock, TimeRounding};
+///		use time::Time;
+///		let clock = Clock::Dial(Time::MIDNIGHT, TimeRounding::Round);
+///		assert_eq!("🕛", clock.to_string());
+/// }
+/// ```
+///
+/// ```
+/// #[cfg(feature = "chrono")]
+/// {
+/// 	use emoji_clock_2::{Clock, TimeRounding};
+/// 	use chrono::NaiveTime;
+/// 	let am_clock = Clock::DialMeridiem(NaiveTime::from_hms_opt(9, 25, 00).unwrap(), TimeRounding::Round);
+/// 	assert_eq!("🕤🌞", am_clock.to_string());
+/// 	let pm_clock = Clock::DialMeridiem(NaiveTime::from_hms_opt(21, 25, 00).unwrap(), TimeRounding::Round);
+/// 	assert_eq!("🕤🌝", pm_clock.to_string());
+/// }
+/// ```
 #[non_exhaustive]
 pub enum Clock<T>
 where
